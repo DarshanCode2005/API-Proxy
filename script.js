@@ -1,8 +1,18 @@
-// api-proxy/api.js
-
 export default async function handler(req, res) {
-  const { path = "/", query = "" } = req.query;
+  // ✅ Allow requests from any origin
+  res.setHeader("Access-Control-Allow-Origin", "*");
 
+  // Optional: allow additional headers/methods
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle preflight (OPTIONS) requests
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
+  const { path = "/", query = "" } = req.query;
   const url = `http://43.205.110.71:8000${path}?${query}`;
 
   try {
